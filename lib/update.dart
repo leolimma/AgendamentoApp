@@ -1,33 +1,22 @@
 import 'package:flutter/material.dart';
+import './tipoButtom.dart';
 
 class UpdatePage extends StatelessWidget {
-
   final int id;
   UpdatePage({this.id});
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text('Alterar Reserva'),
+        title: Text('Atualizar Reservas'),
       ),
-      body: Container(
-        padding: EdgeInsets.all(12.0),
-        alignment: Alignment.center,
-        child: Column(
-          children: <Widget>[
-            Container(
-              child: TextField(
-                decoration: InputDecoration(
-                  border: InputBorder.none,
-                  hintStyle: TextStyle(color: Color(0xFFE1E1E1), fontSize: 14),
-                ),
-              ),
-            ), 
-          ],
-        ),
-      ),
+       body: new ListView(
+         children: <Widget>[
+           buildTextInputRow('Tipo', tipoInputController),
+           buildSecondBottom('Data', dataInputController),
+         ]
+       ),
     );
   }
 }
