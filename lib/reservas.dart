@@ -2,11 +2,9 @@ import 'dart:convert' show json;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-
 var formatterTime = new DateFormat.Hm();
 var formatterDay = new DateFormat.d();
 var formatterMonth = new DateFormat.M();
-
 
 List<Reserva> parseReservas(String responseBody) {
   final parsed = json.decode(responseBody).cast<Map<String, dynamic>>();
@@ -25,8 +23,16 @@ class Reserva {
   final int valor;
   final int duracao;
 
-  Reserva({this.id, this.tipo, this.status, this.criadoEm, 
-  this.inicioEm, this.fimEm, this.canceladaEm, this.valor, this.duracao});
+  Reserva(
+      {this.id,
+      this.tipo,
+      this.status,
+      this.criadoEm,
+      this.inicioEm,
+      this.fimEm,
+      this.canceladaEm,
+      this.valor,
+      this.duracao});
 
   factory Reserva.fromJson(Map<String, dynamic> json) {
     return Reserva(
@@ -44,68 +50,83 @@ class Reserva {
 }
 
 class ReservaList extends StatelessWidget {
-
   final List<Reserva> reservas;
-   
+
   ReservaList({Key key, this.reservas}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        childAspectRatio: 1.92,
         crossAxisCount: 1,
       ),
       itemCount: reservas.length,
-      itemBuilder: (context, index){
-        var timeInicio =  DateTime.parse(reservas[index].inicioEm);
-        var timeFim =  DateTime.parse(reservas[index].fimEm);
-       return Center(
-        child: Card(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              const ListTile(
-                leading: Icon(Icons.assignment),
-                title: Text('Reserva Agendada'),
-              ),
-              new Container(
-                height: 25.0,
-                margin: const EdgeInsets.only(right: 30.0), 
-                child: Text( 'Para o dia: ' + formatterDay.format(timeInicio) + '/' + formatterMonth.format(timeInicio) 
-                + ' às ' +formatterTime.format(timeInicio) + ' - ' + formatterTime.format(timeFim), 
-                style:TextStyle(
-                  fontWeight: FontWeight.bold, 
-                  fontSize: 16.0
+      itemBuilder: (context, index) {
+        var timeInicio = DateTime.parse(reservas[index].inicioEm);
+        var timeFim = DateTime.parse(reservas[index].fimEm);
+        return Container(
+          child: Card(
+            elevation: 10,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                const ListTile(
+                  leading: Icon(Icons.assignment),
+                  title: Text('Reserva Agendada'),
+                ),
+                new Container(
+                  height: 25.0,
+                  width: 250,
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'Para o dia: ' +
+                          formatterDay.format(timeInicio) +
+                          '/' +
+                          formatterMonth.format(timeInicio) +
+                          ' às ' +
+                          formatterTime.format(timeInicio) +
+                          ' - ' +
+                          formatterTime.format(timeFim),
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 16.0),
                     ),
                   ),
-              ),
-              new Container(
-                height: 25.0,
-                margin: const EdgeInsets.only(right: 174.0),
-                child: Text('Tipo: ' + reservas[index].tipo, 
-                style:TextStyle(
-                  fontWeight: FontWeight.bold, 
-                  fontSize: 16.0
+                ),
+                new Container(
+                  height: 25.0,
+                  width: 250,
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'Tipo: ' + reservas[index].tipo,
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 16.0),
+                    ),
                   ),
                 ),
-              ),
-              new Container(
-                height: 25.0,
-                margin: const EdgeInsets.only(right: 174.0),
-                child: Text('Stattus: ' + reservas[index].status, 
-                style:TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16.0),
+                new Container(
+                  height: 25.0,
+                  width: 250,
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'Stattus: ' + reservas[index].status,
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 16.0),
+                    ),
+                  ),
                 ),
-              ),
-            ButtonBar(
-              children: <Widget>[
-                FlatButton(
-                  child: Icon(Icons.border_color),
-                  onPressed: () { /* ... */ },
-                ),
-                FlatButton(
-                  child: Icon(Icons.delete),
-                  onPressed: () { /* ... */ },
+                ButtonBar(
+                  children: <Widget>[
+                    FlatButton(
+                      child: Icon(Icons.border_color),
+                      onPressed: () {/* ... */},
+                    ),
+                    FlatButton(
+                      child: Icon(Icons.delete),
+                      onPressed: () {/* ... */},
                     ),
                   ],
                 ),
