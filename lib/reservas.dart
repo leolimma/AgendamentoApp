@@ -1,6 +1,7 @@
 import 'dart:convert' show json;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import './update.dart';
 
 var formatterTime = new DateFormat.Hm();
 var formatterDay = new DateFormat.d();
@@ -64,6 +65,7 @@ class ReservaList extends StatelessWidget {
       itemBuilder: (context, index) {
         var timeInicio = DateTime.parse(reservas[index].inicioEm);
         var timeFim = DateTime.parse(reservas[index].fimEm);
+        var id = reservas[index].id;
         return Container(
           child: Card(
             elevation: 10,
@@ -122,7 +124,12 @@ class ReservaList extends StatelessWidget {
                   children: <Widget>[
                     FlatButton(
                       child: Icon(Icons.border_color),
-                      onPressed: () {/* ... */},
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => UpdatePage(id: id)),
+                        );
+                      },
                     ),
                     FlatButton(
                       child: Icon(Icons.delete),
