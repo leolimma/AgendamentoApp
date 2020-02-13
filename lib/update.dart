@@ -18,6 +18,8 @@ class _UpdatePageState extends State<UpdatePage> {
 
   void initState() {
     super.initState();
+    dropdownTipoValue = null;
+    dropdownTempoValue = null;
     setState(() {
       if (dropdownItemsTipo.length == 0 && dropdownItemsTempo.length == 0) {
         dropdownItemsTipo.add(TipoModel(tipo: 'SAIBRO'));
@@ -37,19 +39,18 @@ class _UpdatePageState extends State<UpdatePage> {
         title: Text('Atualizar Reservas'),
       ),
       body: new ListView(children: <Widget>[
-        buildTextInputRow('Tipo', tipoInputController),
+        buildTextInputRow(),
         buildSecondButton('Data', dataInputController),
         buildThirdButton('Hora', horaInputController),
-        buildFourthButton('Tempo', tempoInputController),
+        buildFourthButton(),
         button(),
       ]),
     );
   }
 
-  Widget buildTextInputRow(
-      var label, TextEditingController textEditingController) {
+  Widget buildTextInputRow() {
     return Padding(
-      padding: const EdgeInsets.all(30.0),
+      padding: const EdgeInsets.all(10.0),
       child: FormField(
         builder: (FormFieldState state) {
           return DropdownButtonHideUnderline(
@@ -96,10 +97,9 @@ class _UpdatePageState extends State<UpdatePage> {
     );
   }
 
-  Widget buildFourthButton(
-      var label, TextEditingController textEditingController) {
+  Widget buildFourthButton() {
     return Padding(
-      padding: const EdgeInsets.all(30.0),
+      padding: const EdgeInsets.all(10.0),
       child: FormField(
         builder: (FormFieldState state) {
           return DropdownButtonHideUnderline(
@@ -146,21 +146,22 @@ class _UpdatePageState extends State<UpdatePage> {
     );
   }
   Widget button() {
+    int id = widget.id;
   return Column(
     crossAxisAlignment: CrossAxisAlignment.center,
     children: <Widget>[
       new ButtonTheme(
         minWidth: 210.0,
-        height: 10.0,
+        height: 50.0,
         child: RaisedButton(
           child: Text("Alterar"),
-          onPressed: () => resetValue(widget.id , tipoInputController, dataInputController, horaInputController, tempoInputController),
+          onPressed: () => resetValue(id , dropdownTipoValue, dataInputController, horaInputController, dropdownTempoValue, context),
           shape: RoundedRectangleBorder(
               borderRadius: new BorderRadius.circular(18.0),
               side: BorderSide(color: Colors.blue)),
           color: Colors.blue,
           textColor: Colors.white,
-          padding: EdgeInsets.all(30),
+          padding: EdgeInsets.all(10),
           splashColor: Colors.grey,
         ),
       ),

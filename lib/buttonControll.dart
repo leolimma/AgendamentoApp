@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import './requests.dart';
+import './main.dart';
 
 class TipoModel {
   String tipo = '';
@@ -24,11 +26,12 @@ Widget buildSecondButton(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         new Padding(
-          padding: const EdgeInsets.all(30.0),
+          padding: const EdgeInsets.all(10.0),
           child: new Row(
             children: <Widget>[
               new Expanded(
                 child: new TextField(
+                  controller: textEditingController,
                   textAlignVertical: TextAlignVertical.center,
                   decoration: new InputDecoration(
                     border: new OutlineInputBorder(
@@ -57,11 +60,12 @@ Widget buildThirdButton(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         new Padding(
-          padding: const EdgeInsets.all(30.0),
+          padding: const EdgeInsets.all(10.0),
           child: new Row(
             children: <Widget>[
               new Expanded(
                 child: new TextField(
+                  controller: textEditingController,
                   textAlignVertical: TextAlignVertical.center,
                   decoration: new InputDecoration(
                     border: new OutlineInputBorder(
@@ -83,29 +87,84 @@ Widget buildThirdButton(
   );
 }
 
-
- resetValue(id , tipoInputController, dataInputController, horaInputController, tempoInputController)  async {
+resetValue(int id, dropdownTipoValue, dataInputController, horaInputController,
+    dropdownTempoValue, context) async {
+  final dataInicio =
+      await formataInicio(dataInputController.text, horaInputController.text);
+  final dataFim = await formataFim(
+      dataInputController.text, dropdownTempoValue.tempo, horaInputController.text);
+  final enviarReq =
+      await putReserva(id, dataFim, dataInicio, dropdownTipoValue.tipo);
+  if (enviarReq == 204 || enviarReq == 200) {
+    showAlert(context);
+    horaInputController.clear();
+  dataInputController.clear(); 
   dropdownTipoValue = null;
   dropdownTempoValue = null;
-  final dateInicio = await formataInicio(dataInputController, horaInputController); 
-  print(dateInicio);
-
+  }
+  horaInputController.clear();
+  dataInputController.clear(); 
+  dropdownTipoValue = null;
+  dropdownTempoValue = null;
 }
 
 formataInicio(dataInputController, horaInputController) async {
-  var parse = dataInputController;
-  print(parse);
-  return parse;
+  var corteData = dataInputController.split('/');
+  var hora = horaInputController;
+  var dataInicio = corteData[2] +
+      '-' +
+      corteData[1] +
+      '-' +
+      corteData[0] +
+      'T' +
+      hora +
+      ':00Z';
+  return dataInicio;
 }
 
-TextEditingController tipoInputController = new TextEditingController();
-var tempTipo;
+formataFim(dataInputController, dropdownTempoValue, horaInputController) async {
+  var corteData = dataInputController.split('/');
+  var corteHora = horaInputController.split(':00');
+  var corteHoratempo = dropdownTempoValue.split('h');
+  var horaInt = int.parse(corteHora[0]);
+  var tempoInt = int.parse(corteHoratempo[0]);
+  var somaTempo = horaInt + tempoInt;
+  var tempoFinal = somaTempo.toString();
+  var dataFinal = corteData[2] +
+      '-' +
+      corteData[1] +
+      '-' +
+      corteData[0] +
+      'T' +
+      tempoFinal +
+      ':00:00Z';
+  return dataFinal;
+}
+
+void showAlert(BuildContext context) {
+  Widget okButton = FlatButton(
+    child: Text("OK"),
+    onPressed: () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => MyApp()),
+      );
+    },
+  );
+  showDialog(
+    barrierDismissible: false,
+      context: context,
+      builder: (context) => AlertDialog(
+            title: Text("Reserva"),
+            content: Text("Sua reserva foi alterada com sucesso"),
+            actions: [
+              okButton,
+            ],
+          ));
+}
 
 TextEditingController dataInputController = new TextEditingController();
 var tempData;
 
 TextEditingController horaInputController = new TextEditingController();
 var tempHora;
-
-TextEditingController tempoInputController = new TextEditingController();
-var tempTempo;

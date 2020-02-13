@@ -2,6 +2,7 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 import './reservas.dart';
 import 'package:flutter/foundation.dart';
+import 'dart:convert' show json;
 
 
 
@@ -17,3 +18,14 @@ Future<List<Reserva>> getReserva(http.Client client) async {
   }
 }
 
+
+putReserva(id , dataFim, dataInicio, tipo) async {
+  final response = await http.put('http://tennis-concierge.mybluemix.net/reservas/$id', 
+  body:json.encode({
+    "id":id,
+    "tipo":tipo,
+    "inicioEm": dataInicio,
+    "fimEm": dataFim
+  }),headers: { "Content-Type" : "application/json"});
+  return response.statusCode;
+}

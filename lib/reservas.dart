@@ -58,7 +58,7 @@ class ReservaList extends StatelessWidget {
   Widget build(BuildContext context) {
     return GridView.builder(
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        childAspectRatio: 1.92,
+        childAspectRatio: 1.70,
         crossAxisCount: 1,
       ),
       itemCount: reservas.length,
