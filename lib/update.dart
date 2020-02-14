@@ -20,6 +20,7 @@ class _UpdatePageState extends State<UpdatePage> {
     super.initState();
     dropdownTipoValue = null;
     dropdownTempoValue = null;
+     
     setState(() {
       if (dropdownItemsTipo.length == 0 && dropdownItemsTempo.length == 0) {
         dropdownItemsTipo.add(TipoModel(tipo: 'SAIBRO'));

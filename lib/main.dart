@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import './reservas.dart';
 import './requests.dart';
 import 'package:http/http.dart' as http;
+import './routes.dart';
 
 void main() {
   runApp(MyApp());
@@ -23,6 +24,7 @@ class _MyApp extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      initialRoute: homeRoute,
       home: Scaffold(
         appBar: AppBar(
           centerTitle: true,

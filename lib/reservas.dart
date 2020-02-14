@@ -79,7 +79,7 @@ class ReservaList extends StatelessWidget {
                 ),
                 new Container(
                   height: 25.0,
-                  width: 250,
+                  width: 260,
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child: Text(

@@ -97,15 +97,10 @@ resetValue(int id, dropdownTipoValue, dataInputController, horaInputController,
       await putReserva(id, dataFim, dataInicio, dropdownTipoValue.tipo);
   if (enviarReq == 204 || enviarReq == 200) {
     showAlert(context);
-    horaInputController.clear();
-  dataInputController.clear(); 
-  dropdownTipoValue = null;
-  dropdownTempoValue = null;
   }
-  horaInputController.clear();
-  dataInputController.clear(); 
-  dropdownTipoValue = null;
-  dropdownTempoValue = null;
+     horaInputController.clear();
+     dataInputController.clear(); 
+     return enviarReq;
 }
 
 formataInicio(dataInputController, horaInputController) async {
@@ -141,17 +136,22 @@ formataFim(dataInputController, dropdownTempoValue, horaInputController) async {
   return dataFinal;
 }
 
-void showAlert(BuildContext context) {
+void showAlert(BuildContext context) async {
   Widget okButton = FlatButton(
     child: Text("OK"),
     onPressed: () {
-      Navigator.push(
+       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => MyApp()),
+       new MaterialPageRoute(builder: ( BuildContext context) => new MyApp()),
       );
+
+// Navigator.popUntil(context, ModalRoute.withName(Navigator.defaultRouteName));
+// Navigator.of(context, rootNavigator: true).popUntil(ModalRoute.withName(Navigator.defaultRouteName));
+
+
     },
   );
-  showDialog(
+  await showDialog(
     barrierDismissible: false,
       context: context,
       builder: (context) => AlertDialog(
