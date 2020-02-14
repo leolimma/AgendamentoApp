@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-import './updateControll.dart';
+import './addControll.dart';
 
-class UpdatePage extends StatefulWidget {
-  final int id;
-  UpdatePage({this.id});
+class AddPage extends StatefulWidget {
+  
 
   @override
-  _UpdatePageState createState() => _UpdatePageState();
+  _AddPageState createState() => _AddPageState();
 }
 
-class _UpdatePageState extends State<UpdatePage> {
+class _AddPageState extends State<AddPage> {
   
   static List<TipoModel> dropdownItemsTipo = new List();
   static List<TempoModel> dropdownItemsTempo = new List();
@@ -37,7 +36,7 @@ class _UpdatePageState extends State<UpdatePage> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text('Alterar reserva'),
+        title: Text('Nova reserva'),
       ),
       body: new ListView(children: <Widget>[
         buildTextInputRow(),
@@ -147,7 +146,6 @@ class _UpdatePageState extends State<UpdatePage> {
     );
   }
   Widget button() {
-    int id = widget.id;
   return Column(
     crossAxisAlignment: CrossAxisAlignment.center,
     children: <Widget>[
@@ -155,8 +153,8 @@ class _UpdatePageState extends State<UpdatePage> {
         minWidth: 210.0,
         height: 50.0,
         child: RaisedButton(
-          child: Text("Alterar"),
-          onPressed: () => resetValue(id , dropdownTipoValue, dataInputController, horaInputController, dropdownTempoValue, context),
+          child: Text("Criar"),
+          onPressed: () => resetValue(dropdownTipoValue, dataInputController, horaInputController, dropdownTempoValue, context),
           shape: RoundedRectangleBorder(
               borderRadius: new BorderRadius.circular(18.0),
               side: BorderSide(color: Colors.blue)),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import './requests.dart';
-import './main.dart';
+import './alertButton.dart';
 
 class TipoModel {
   String tipo = '';
@@ -89,78 +89,77 @@ Widget buildThirdButton(
 
 resetValue(int id, dropdownTipoValue, dataInputController, horaInputController,
     dropdownTempoValue, context) async {
-  final dataInicio =
-      await formataInicio(dataInputController.text, horaInputController.text);
-  final dataFim = await formataFim(
-      dataInputController.text, dropdownTempoValue.tempo, horaInputController.text);
-  final enviarReq =
-      await putReserva(id, dataFim, dataInicio, dropdownTipoValue.tipo);
-  if (enviarReq == 204 || enviarReq == 200) {
-    showAlert(context);
+  if (dropdownTipoValue == null ||
+      dataInputController.text == "" ||
+      horaInputController.text == "" ||
+      dropdownTempoValue == null) {
+    showAlertVazio(context);
+  } else {
+    final dataInicio =
+        await formataInicio(dataInputController.text, horaInputController.text);
+    final dataFim = await formataFim(dataInputController.text,
+        dropdownTempoValue.tempo, horaInputController.text);
+    if (dataInicio == null) {
+      alertDialogDataError(context);
+    } else if (dataFim == null) {
+      alertDialogHoraError(context);
+    } else {
+      final enviarReq =
+          await putReserva(id, dataFim, dataInicio, dropdownTipoValue.tipo);
+      if (enviarReq == 204 || enviarReq == 200) {
+        updateAlert(context);
+      } else if (enviarReq == 422) {
+        alertDialog422(context);
+      } else if (enviarReq == 500 || enviarReq == 0) {
+        showAlertServiceError(context);
+      }
+      horaInputController.clear();
+      dataInputController.clear();
+    }
   }
-     horaInputController.clear();
-     dataInputController.clear(); 
-     return enviarReq;
 }
 
-formataInicio(dataInputController, horaInputController) async {
-  var corteData = dataInputController.split('/');
-  var hora = horaInputController;
-  var dataInicio = corteData[2] +
-      '-' +
-      corteData[1] +
-      '-' +
-      corteData[0] +
-      'T' +
-      hora +
-      ':00Z';
-  return dataInicio;
+formataInicio(dataInputController, horaInputController) {
+  final validaData = new RegExp(r'(\d{2})[-.\/](\d{2})[-.\/](\d{4})');
+  var isDataValida = validaData.hasMatch(dataInputController);
+  if (isDataValida == true) {
+    var corteData = dataInputController.split('/');
+    var hora = horaInputController;
+    var dataInicio = corteData[2] +
+        '-' +
+        corteData[1] +
+        '-' +
+        corteData[0] +
+        'T' +
+        hora +
+        ':00Z';
+    return dataInicio;
+  }
 }
 
-formataFim(dataInputController, dropdownTempoValue, horaInputController) async {
-  var corteData = dataInputController.split('/');
-  var corteHora = horaInputController.split(':00');
-  var corteHoratempo = dropdownTempoValue.split('h');
-  var horaInt = int.parse(corteHora[0]);
-  var tempoInt = int.parse(corteHoratempo[0]);
-  var somaTempo = horaInt + tempoInt;
-  var tempoFinal = somaTempo.toString();
-  var dataFinal = corteData[2] +
-      '-' +
-      corteData[1] +
-      '-' +
-      corteData[0] +
-      'T' +
-      tempoFinal +
-      ':00:00Z';
-  return dataFinal;
-}
-
-void showAlert(BuildContext context) async {
-  Widget okButton = FlatButton(
-    child: Text("OK"),
-    onPressed: () {
-       Navigator.push(
-        context,
-       new MaterialPageRoute(builder: ( BuildContext context) => new MyApp()),
-      );
-
-// Navigator.popUntil(context, ModalRoute.withName(Navigator.defaultRouteName));
-// Navigator.of(context, rootNavigator: true).popUntil(ModalRoute.withName(Navigator.defaultRouteName));
-
-
-    },
-  );
-  await showDialog(
-    barrierDismissible: false,
-      context: context,
-      builder: (context) => AlertDialog(
-            title: Text("Reserva"),
-            content: Text("Sua reserva foi alterada com sucesso"),
-            actions: [
-              okButton,
-            ],
-          ));
+formataFim(dataInputController, dropdownTempoValue, horaInputController) {
+  final validaData = new RegExp(r'(\d{2})[-.\/](\d{2})[-.\/](\d{4})');
+  var isDataValida = validaData.hasMatch(dataInputController);
+  final validaHora = new RegExp(r'^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$');
+  var isHoraValida = validaHora.hasMatch(horaInputController);
+  if (isHoraValida == true && isDataValida == true) {
+    var corteData = dataInputController.split('/');
+    var corteHora = horaInputController.split(':00');
+    var corteHoratempo = dropdownTempoValue.split('h');
+    var horaInt = int.parse(corteHora[0]);
+    var tempoInt = int.parse(corteHoratempo[0]);
+    var somaTempo = horaInt + tempoInt;
+    var tempoFinal = somaTempo.toString();
+    var dataFinal = corteData[2] +
+        '-' +
+        corteData[1] +
+        '-' +
+        corteData[0] +
+        'T' +
+        tempoFinal +
+        ':00:00Z';
+    return dataFinal;
+  }
 }
 
 TextEditingController dataInputController = new TextEditingController();

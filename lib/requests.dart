@@ -29,3 +29,13 @@ putReserva(id , dataFim, dataInicio, tipo) async {
   }),headers: { "Content-Type" : "application/json"});
   return response.statusCode;
 }
+
+addReserva(dataFim, dataInicio, tipo) async {
+  final response = await http.post('http://tennis-concierge.mybluemix.net/reservas/', 
+  body:json.encode({
+    "tipo":tipo,
+    "inicioEm": dataInicio,
+    "fimEm": dataFim
+  }),headers: { "Content-Type" : "application/json"});
+  return response.statusCode;
+}
