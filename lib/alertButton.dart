@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import './main.dart';
+import './deleteControll.dart';
 
 void updateAlert(BuildContext context)  {
   showDialog(
@@ -206,6 +207,72 @@ void showAlertVazio(BuildContext context)  {
                 onPressed: () {
                   setState(() {
                     Navigator.of(context).pop();
+                    contentText = "Changed Content of Dialog";
+                  });
+                },
+                child: Text("Ok"),
+              ),
+            ],
+          );
+        },
+      );
+    },
+  );
+}
+
+alertDelete(BuildContext context, id) {
+
+showDialog(
+    barrierDismissible: false,
+    context: context,
+    builder: (context) {
+      String contentText = "Tem certeza que deseja cancelar a reserva?";
+      return StatefulBuilder(
+        builder: (context, setState) {
+          return AlertDialog(
+            title: Text("Reserva"),
+            content: Text(contentText),
+            actions: [
+              FlatButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text("Cancel"),
+            ),
+              FlatButton(
+                onPressed: () {
+                  setState(() {
+                    sendDeleteRequest(context, id);
+                  });
+                },
+                child: Text("Ok"),
+              ),
+            ],
+          );
+        },
+      );
+    },
+  );
+}
+
+void deleteSuccesAlert(BuildContext context)  {
+  showDialog(
+    barrierDismissible: false,
+    context: context,
+    builder: (context) {
+      String contentText = "Sua reserva foi cancelada com sucesso.";
+      return StatefulBuilder(
+        builder: (context, setState) {
+          return AlertDialog(
+            title: Text("Reserva"),
+            content: Text(contentText),
+            actions: [
+              FlatButton(
+                onPressed: () {
+                  setState(() {
+                    Navigator.push(
+                      context,
+                      new MaterialPageRoute(
+                          builder: (BuildContext context) => new MyApp()),
+                    );
                     contentText = "Changed Content of Dialog";
                   });
                 },

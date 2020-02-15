@@ -39,3 +39,8 @@ addReserva(dataFim, dataInicio, tipo) async {
   }),headers: { "Content-Type" : "application/json"});
   return response.statusCode;
 }
+
+deleteReserva(id) async {
+  final response = await http.delete('http://tennis-concierge.mybluemix.net/reservas/$id');
+  return response.statusCode;
+}

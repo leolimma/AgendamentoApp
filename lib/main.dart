@@ -23,7 +23,8 @@ class _MyApp extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: HomeScreen());
+    return MaterialApp(home: HomeScreen(),debugShowCheckedModeBanner: false,
+);
   }
 }
 
@@ -31,6 +32,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
           centerTitle: true,

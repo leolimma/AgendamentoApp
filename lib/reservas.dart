@@ -2,6 +2,7 @@ import 'dart:convert' show json;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import './update.dart';
+import './deleteControll.dart';
 
 var formatterTime = new DateFormat.Hm();
 var formatterDay = new DateFormat.d();
@@ -114,7 +115,7 @@ class ReservaList extends StatelessWidget {
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      'Stattus: ' + reservas[index].status,
+                      'Status: ' + reservas[index].status,
                       style: TextStyle(
                           fontWeight: FontWeight.bold, fontSize: 16.0),
                     ),
@@ -133,7 +134,7 @@ class ReservaList extends StatelessWidget {
                     ),
                     FlatButton(
                       child: Icon(Icons.delete),
-                      onPressed: () {/* ... */},
+                      onPressed: () {softDelete(id, context);},
                     ),
                   ],
                 ),
